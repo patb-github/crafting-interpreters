@@ -80,7 +80,21 @@ class Scanner {
                 if (match('/')) {
                     // A comment goes until the end of the line.
                     while (peek() != '\n' && !isAtEnd()) advance();
-                } else {
+                } 
+                //======== CHALLENGE 4.4 START =============
+                else if (match('*')) {
+                    // We have a block comment.
+                    // comment will end when we see a */
+                    while (!(peek() == '*' && peekNext() == '/') && !isAtEnd()) {
+                        if (advance() == '\n') line++;
+                    }
+
+                    // Consume the */
+                    if (!isAtEnd()) advance();
+                    if (!isAtEnd()) advance();
+                } 
+                //========= CHALLENGE 4.4 END ==============
+                else {
                     addToken(SLASH);
                 }
                 break;
