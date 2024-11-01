@@ -4,16 +4,7 @@ jlox is a tree-walk interpreter for lox. This implementation is written in Java.
 
 ## Additional Features
 
-Additional features come from the 'challenge' sections of the book.
-### (Chapter 4, Challenge 4) C-style `/*...*/` block comments
-This type of block comment is also found in Java. I have decided to leave out nesting comments for reasons related to familiarty, simplicity and practicality. 
-- In both C and Java, these comments do not nest, so `/* a /* b */ c */` would leave ` c*/` uncommented. 
-- Implementing a nested version should be manageable but would be a bit complicated. We would need to keep of how many `/*` we have seen so far to know how many times we need to close it. But there are also some edge cases. For example, if we have `/* a /* b */`, should we just comment out ` a /* b `, or is it an incomplete comment? 
-- Nesting comments does not seem very practical. Since text inside block comments are ignored anyway, there is no real need to use nested comments to comment out a piece of text already inside a comment, unless the user wanted to write `/*...*/` inside a block comment for some reason.
-
-## Getting Started
-
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Additional features come from the 'challenge' sections of the book. They can be found in the [challenges](./challenges) folder.
 
 ## Folder Structure
 
@@ -25,7 +16,3 @@ The workspace contains two folders by default, where:
 Meanwhile, the compiled output files will be generated in the `bin` folder by default.
 
 > If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
