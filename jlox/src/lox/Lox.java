@@ -41,8 +41,10 @@ public class Lox {
         for (;;) {
             System.out.print("> ");
             String line = reader.readLine();
+            if (line == null) break;
             //============== CHALLENGE 8.1 START ==============
             line = line.trim();
+            if (line.isEmpty()) continue;
             if (!(line.endsWith(";") | line.endsWith("}"))) {
                 int start = Math.max(
                     line.lastIndexOf(";"),
@@ -52,8 +54,6 @@ public class Lox {
                 line = line.substring(0, start) + "print " + line.substring(start) + ";";
             }
             //=============== CHALLENGE 8.1 END ===============
-            if (line == null)
-                break;
             run(line);
             hadError = false;
         }
