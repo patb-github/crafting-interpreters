@@ -1,4 +1,4 @@
-### (Chapter 8, Challenge 1) 
+### (Chapter 8, Challenge 1) REPL Expression Input Evaluation
 
 In addition to statements, the REPL now allows the user to enter an expression, which is then evaluated then printed.
 
