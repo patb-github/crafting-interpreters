@@ -288,4 +288,11 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
         return function.call(this, arguments);
     }
+
+    //================ CHALLENGE 10.1 NEW METHOD START ======================
+    @Override
+    public Object visitFunctionExpr(Expr.Function expr) {
+        return new LoxFunction(expr, environment);
+    }
+    //================ CHALLENGE 10.1 NEW METHOD END ======================
 }

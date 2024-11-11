@@ -31,7 +31,16 @@ class Parser {
 
     private Stmt declaration() {
         try {
-            if (match(FUN)) return function("function");
+            //============ MODIFIED FOR CHALLENGE 10.1 =============
+            if (match(FUN)) {
+                if (check(LEFT_PAREN)) {
+                    // anonymous function in expression statement
+                    current--; // return to the function token
+                    return expressionStatement();
+                }
+                return function("function");
+            }
+            //=======================================================
             if (match(VAR)) return varDeclaration();
 
             return statement();
@@ -300,7 +309,10 @@ class Parser {
     }
 
     private Expr call() {
-        Expr expr = primary();
+        //============= MODIFIED FOR CHALLENGE 10.1 =============
+        // go to anonymousFunction() instead of primary()
+        Expr expr = anonymousFunction();
+        //=======================================================
 
         while (true) {
             if (match(LEFT_PAREN)) {
@@ -312,6 +324,30 @@ class Parser {
 
         return expr;
     }
+
+    //================= CHALLENGE 10.1 NEW METHOD START ======================
+    private Expr anonymousFunction() {
+        if (!check(FUN)) return primary();
+        advance();
+
+        consume(LEFT_PAREN, "Expect '(' after anonymous function declaration.");
+        List<Token> parameters = new ArrayList<>();
+        if (!check(RIGHT_PAREN)) {
+            do {
+                if (parameters.size() >= 255) {
+                    error(peek(), "Can't have more than 255 parameters.");
+                }
+
+                parameters.add(consume(IDENTIFIER, "Expect parameter name."));
+            } while (match(COMMA));
+        }
+        consume(RIGHT_PAREN, "Expect ')' after parameters.");
+
+        consume(LEFT_BRACE, "Expect '{' before function body.");
+        List<Stmt> body = block();
+        return new Expr.Function(parameters, body);
+    }
+    //================= CHALLENGE 10.1 NEW METHOD END ======================
 
     private Expr primary() {
         if (match(FALSE)) return new Expr.Literal(false);
