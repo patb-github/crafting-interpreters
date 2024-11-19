@@ -58,7 +58,16 @@ static InterpretResult run() {
             case OP_SUBTRACT: BINARY_OP(-); break;
             case OP_MULTIPLY: BINARY_OP(*); break;
             case OP_DIVIDE:   BINARY_OP(/); break;
-            case OP_NEGATE:   push(-pop()); break;
+            //========= Modified for Challenge 15.4 =========
+            case OP_NEGATE: {
+                /* ORIGINAL CODE: 
+                 * push(-pop()); break;
+                 */
+                Value* valuePointer = vm.stackTop - 1;
+                *valuePointer = -(*valuePointer);
+                break;
+            }
+            //============= Challenge 15.4 End ==============
             case OP_RETURN: {
                 printValue(pop());
                 printf("\n");

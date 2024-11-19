@@ -33,5 +33,5 @@ int main(int argc, const char* argv[]) {
     interpret(&chunk);
     freeVM();
     freeChunk(&chunk);
-  return 0;
+    return 0;
 }
