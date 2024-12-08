@@ -10,6 +10,9 @@ typedef enum {
     OP_TRUE,
     OP_FALSE,
     OP_POP,
+    //==== Challenge 23.1 =====
+    OP_DUPLICATE,
+    //=========================
     OP_GET_LOCAL,
     OP_SET_LOCAL,
     OP_GET_GLOBAL,

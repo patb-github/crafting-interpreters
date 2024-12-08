@@ -393,6 +393,9 @@ ParseRule rules[] = {
     [TOKEN_SEMICOLON]     = {NULL,     NULL,   PREC_NONE},
     [TOKEN_SLASH]         = {NULL,     binary, PREC_FACTOR},
     [TOKEN_STAR]          = {NULL,     binary, PREC_FACTOR},
+    //============== Modified for Challenge 23.1 ===============
+    [TOKEN_COLON]         = {NULL,     NULL,   PREC_NONE},
+    //==========================================================
     [TOKEN_BANG]          = {unary,    NULL,   PREC_NONE},
     [TOKEN_BANG_EQUAL]    = {NULL,     binary, PREC_EQUALITY},
     [TOKEN_EQUAL]         = {NULL,     NULL,   PREC_NONE},
@@ -420,6 +423,11 @@ ParseRule rules[] = {
     [TOKEN_TRUE]          = {literal,  NULL,   PREC_NONE},
     [TOKEN_VAR]           = {NULL,     NULL,   PREC_NONE},
     [TOKEN_WHILE]         = {NULL,     NULL,   PREC_NONE},
+    //============== Modified for Challenge 23.1 ===============
+    [TOKEN_SWITCH]        = {NULL,     NULL,   PREC_NONE},
+    [TOKEN_CASE]          = {NULL,     NULL,   PREC_NONE},
+    [TOKEN_DEFAULT]       = {NULL,     NULL,   PREC_NONE},
+    //==========================================================
     [TOKEN_ERROR]         = {NULL,     NULL,   PREC_NONE},
     [TOKEN_EOF]           = {NULL,     NULL,   PREC_NONE},
 };
@@ -565,6 +573,69 @@ static void whileStatement() {
     emitByte(OP_POP);
 }
 
+static void switchStatement() {
+    consume(TOKEN_LEFT_PAREN, "Expect '(' after 'switch'.");
+    expression();
+    consume(TOKEN_RIGHT_PAREN, "Expect ')' after condition.");
+
+    consume(TOKEN_LEFT_BRACE, "Expect '{' to begin switch block.");
+
+    int caseStart = -1;
+    int caseJump = -1;
+    bool hasDefault = false;
+    while (!check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF)) {
+        if (match(TOKEN_CASE)) {
+            if (caseStart != -1) {
+                patchJump(caseStart);
+                emitByte(OP_POP);
+            }
+
+            emitByte(OP_DUPLICATE);
+            expression();
+            emitByte(OP_EQUAL);
+
+            consume(TOKEN_COLON, "Expect ':' after case expression.");
+            caseStart = emitJump(OP_JUMP_IF_FALSE);
+            emitByte(OP_POP);
+
+            beginScope();
+            while (!check(TOKEN_CASE) && !check(TOKEN_DEFAULT) &&
+                   !check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF)) {
+                statement();
+            }
+            endScope();
+
+            if (caseJump != -1) patchJump(caseJump);
+            caseJump = emitJump(OP_JUMP);
+        } else if (match(TOKEN_DEFAULT)) {
+            hasDefault = true;
+            if (caseStart != -1) patchJump(caseStart);
+            emitByte(OP_POP);
+            consume(TOKEN_COLON, "Expect ':' after default.");
+
+            beginScope();
+            while (!check(TOKEN_CASE) && !check(TOKEN_DEFAULT) && 
+                   !check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF)) {
+                statement();
+            }
+            endScope();
+            
+            // We break out because there can only be one default case.
+            break;
+        } else {
+            errorAtCurrent("Expect 'case' or 'default'.");
+        }
+    }
+
+    if (caseStart != -1 && !hasDefault) {
+        patchJump(caseStart);
+        emitByte(OP_POP);
+    }
+    if (caseJump != -1) patchJump(caseJump);
+    consume(TOKEN_RIGHT_BRACE, "Expect '}' to end switch block.");
+    emitByte(OP_POP);
+}
+
 static void synchronize() {
     parser.panicMode = false;
 
@@ -608,6 +679,10 @@ static void statement() {
         ifStatement();
     } else if (match(TOKEN_WHILE)) {
         whileStatement();
+    //============ Modified for Challenge 23.1 ===============
+    } else if (match(TOKEN_SWITCH)) {
+        switchStatement();
+    //========================================================
     } else if (match(TOKEN_LEFT_BRACE)) {
         beginScope();
         block();
