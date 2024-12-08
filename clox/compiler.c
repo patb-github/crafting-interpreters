@@ -573,6 +573,7 @@ static void whileStatement() {
     emitByte(OP_POP);
 }
 
+//==================== Challenge 23.1 ====================
 static void switchStatement() {
     consume(TOKEN_LEFT_PAREN, "Expect '(' after 'switch'.");
     expression();
@@ -635,6 +636,7 @@ static void switchStatement() {
     consume(TOKEN_RIGHT_BRACE, "Expect '}' to end switch block.");
     emitByte(OP_POP);
 }
+//========================================================
 
 static void synchronize() {
     parser.panicMode = false;

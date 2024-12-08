@@ -57,8 +57,10 @@ int disassembleInstruction(Chunk* chunk, int offset) {
             return simpleInstruction("OP_FALSE", offset);
         case OP_POP:
             return simpleInstruction("OP_POP", offset);
+        //================ Challenge 23.1 ================
         case OP_DUPLICATE:
             return simpleInstruction("OP_DUPLICATE", offset);
+        //================================================
         case OP_GET_LOCAL:
             return byteInstruction("OP_GET_LOCAL", chunk, offset);
         case OP_SET_LOCAL:

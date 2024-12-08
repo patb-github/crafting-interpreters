@@ -214,7 +214,9 @@ Token scanToken() {
         case '+': return makeToken(TOKEN_PLUS);
         case '/': return makeToken(TOKEN_SLASH);
         case '*': return makeToken(TOKEN_STAR);
+        //============== Modified for Challenge 23.1 ===============
         case ':': return makeToken(TOKEN_COLON);
+        //==========================================================
         case '!':
             return makeToken(
                 match('=') ? TOKEN_BANG_EQUAL : TOKEN_BANG);
