@@ -27,9 +27,12 @@ ObjFunction* newFunction() {
     return function;
 }
 
-ObjNative* newNative(NativeFn function) {
+ObjNative* newNative(NativeFn function, int arity) { //==== Modified for Challenge 24.2 =====
     ObjNative* native = ALLOCATE_OBJ(ObjNative, OBJ_NATIVE);
     native->function = function;
+    //========== Challenge 24.2 ============
+    native->arity = arity;
+    //======================================
     return native;
 }
 

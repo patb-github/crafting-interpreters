@@ -38,6 +38,9 @@ typedef Value (*NativeFn)(int argCount, Value* args);
 
 typedef struct {
     Obj obj;
+    //==== Challenge 24.2 =====
+    int arity;
+    //==========================
     NativeFn function;
 } ObjNative;
 
@@ -49,7 +52,7 @@ struct ObjString {
 };
 
 ObjFunction* newFunction();
-ObjNative* newNative(NativeFn function);
+ObjNative* newNative(NativeFn function, int arity); //==== Modified for Challenge 24.2 =====
 ObjString* takeString(char* chars, int length);
 ObjString* copyString(const char* chars, int length);
 void printObject(Value value);
