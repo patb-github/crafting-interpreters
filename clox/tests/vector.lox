@@ -1,0 +1,39 @@
+// Challenge 25.3: Modelling Objects Using Closures 
+
+// *Constructor* function
+fun Vector(x, y) {
+
+    // *Method* to add another vector
+    fun add(vector) {
+        return Vector(
+            x + vector("x"),
+            y + vector("y")
+        );
+    }
+
+    // We can even add more methods, then add them to the 'methods' function
+    
+    // For getter *method* to access x and y coordinates,
+    // call the point *object* with "x" or "y" 
+    fun methods(method) {
+        if (method == "x") return x;
+        if (method == "y") return y;
+        if (method == "add") return add;
+        return nil;
+    }
+
+    return methods;
+}
+
+// Testing
+var p1 = Vector(3, 4);
+print p1("x"); // 3
+print p1("y"); // 4
+
+var p2 = Vector(5, 6);
+print p2("x"); // 5
+print p2("y"); // 6
+
+var p3 = p1("add")(p2);
+print p3("x"); // 8
+print p3("y"); // 10
