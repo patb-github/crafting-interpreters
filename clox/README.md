@@ -23,3 +23,12 @@ then run the generated executable:
 ./clox
 ```
 You could also just include `./clox` as the last command in `run.sh` to run the interpreter immediately after compilation.
+
+To disable the debug trace and logs, comment out the following lines in [`common.h`](./common.h) before compiling:
+```h
+#define DEBUG_PRINT_CODE
+#define DEBUG_TRACE_EXECUTION
+
+#define DEBUG_STRESS_GC
+#define DEBUG_LOG_GC
+```
