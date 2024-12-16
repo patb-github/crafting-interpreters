@@ -1,6 +1,6 @@
 # jlox
 
-jlox is a tree-walk interpreter for lox. This implementation is written in Java.
+jlox is a tree-walk interpreter for Lox. This implementation is written in Java.
 
 ## Additional Features
 
